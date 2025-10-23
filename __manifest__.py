@@ -28,6 +28,9 @@ Long description of module's purpose
         'views/doctor.xml',
         'views/patient.xml',
         'views/appointment.xml',
+        'views/prescription.xml',
+        'views/cabin.xml',
+        'views/word.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

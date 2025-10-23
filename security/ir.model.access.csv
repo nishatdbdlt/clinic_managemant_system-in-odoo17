@@ -4,3 +4,8 @@ access_clinic_doctor_user,access.clinic.doctor.user,model_clinic_doctor,base.gro
 access_clinic_patient_user,access_clinic_patient_user,model_clinic_patient,,1,1,1,1
 
 access_clinic_appointment_user,access_clinic_appointment_user,model_clinic_appointment,,1,1,1,1
+
+access_clinic_prescription_user,access_clinic_prescription_user,model_clinic_prescription,,1,1,1,1
+
+access_clinic_cabin_user,access_clinic_cabin_user,model_clinic_cabin,,1,1,1,1
+access_clinic_ward_user,access_clinic_ward_user,model_clinic_ward,,1,1,1,1

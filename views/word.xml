@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+     <record id="action_clinic_ward" model="ir.actions.act_window">
+        <field name="name">Wards</field>
+        <field name="res_model">clinic.ward</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Ward
+            </p>
+        </field>
+    </record>
+        <record id="view_clinic_ward_tree" model="ir.ui.view">
+        <field name="name">clinic.ward.tree</field>
+        <field name="model">clinic.ward</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="ward_number"/>
+                <field name="name"/>
+                <field name="ward_type"/>
+                <field name="bed_capacity"/>
+                <field name="occupied_beds"/>
+                <field name="available_beds"/>
+                <field name="occupancy_rate"/>
+                <field name="daily_rate"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_clinic_ward_form" model="ir.ui.view">
+        <field name="name">clinic.ward.form</field>
+        <field name="model">clinic.ward</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="ward_number"/>
+                        <field name="name"/>
+                        <field name="ward_type"/>
+                        <field name="floor"/>
+                        <field name="building"/>
+                        <field name="bed_capacity"/>
+                        <field name="occupied_beds" readonly="1"/>
+                        <field name="available_beds" readonly="1"/>
+                        <field name="occupancy_rate" readonly="1"/>
+                        <field name="daily_rate"/>
+                    </group>
+                    <group>
+                        <field name="head_nurse_id"/>
+                        <field name="nurse_count"/>
+                        <field name="has_ac"/>
+                        <field name="has_oxygen"/>
+                        <field name="has_monitor"/>
+                        <field name="has_emergency_equipment"/>
+                    </group>
+                    <group>
+                        <field name="status"/>
+                        <field name="active"/>
+                        <field name="description"/>
+                        <field name="notes"/>
+                    </group>
+                    <notebook>
+                        <page string="Patients">
+                            <field name="patient_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="age"/>
+                                    <field name="gender"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+        <menuitem id="menu_ward_root" name="Wards" parent="menu_clinic_management" sequence="2" action="action_clinic_ward"/>
+
+
+
+</odoo>

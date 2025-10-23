@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Menus -->
+
+
+    <!-- Actions for Cabins -->
+    <record id="action_clinic_cabin" model="ir.actions.act_window">
+        <field name="name">Cabins</field>
+        <field name="res_model">clinic.cabin</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Cabin
+            </p>
+        </field>
+    </record>
+
+    <!-- Actions for Wards -->
+
+
+    <!-- Cabin Menu Action -->
+
+    <!-- Ward Menu Action -->
+
+    <!-- Cabin Views -->
+    <record id="view_clinic_cabin_tree" model="ir.ui.view">
+        <field name="name">clinic.cabin.tree</field>
+        <field name="model">clinic.cabin</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="cabin_number"/>
+                <field name="name"/>
+                <field name="cabin_type"/>
+                <field name="bed_capacity"/>
+                <field name="occupied_beds"/>
+                <field name="available_beds"/>
+                <field name="daily_rate"/>
+                <field name="status"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_clinic_cabin_form" model="ir.ui.view">
+        <field name="name">clinic.cabin.form</field>
+        <field name="model">clinic.cabin</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="cabin_number"/>
+                        <field name="name"/>
+                        <field name="cabin_type"/>
+                        <field name="floor"/>
+                        <field name="building"/>
+                        <field name="bed_capacity"/>
+                        <field name="occupied_beds" readonly="1"/>
+                        <field name="available_beds" readonly="1"/>
+                        <field name="daily_rate"/>
+                    </group>
+                    <group>
+                        <field name="has_ac"/>
+                        <field name="has_tv"/>
+                        <field name="has_wifi"/>
+                        <field name="has_bathroom"/>
+                        <field name="has_oxygen"/>
+                        <field name="has_monitor"/>
+                    </group>
+                    <group>
+                        <field name="status"/>
+                        <field name="active"/>
+                        <field name="description"/>
+                        <field name="notes"/>
+                    </group>
+                    <notebook>
+                        <page string="Patients">
+                            <field name="patient_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="age"/>
+                                    <field name="gender"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+        <menuitem id="menu_cabin_root" name="Cabins" parent="menu_clinic_management" sequence="1" action="action_clinic_cabin"/>
+
+    <!-- Ward Views -->
+
+
+</odoo>

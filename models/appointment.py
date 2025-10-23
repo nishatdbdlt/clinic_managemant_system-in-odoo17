@@ -72,7 +72,7 @@ class ClinicAppointment(models.Model):
     ], string='Status', default='draft', tracking=True)
 
     # Relations
-    # prescription_id = fields.Many2one('clinic.prescription', string='Prescription')
+    prescription_id = fields.Many2one('clinic.prescription', string='Prescription')
     # lab_test_ids = fields.One2many('clinic.lab.test', 'appointment_id', string='Lab Tests')
 
     # Reminder
@@ -168,20 +168,20 @@ class ClinicAppointment(models.Model):
         for record in self:
             record.state = 'cancelled'
 
-    # def action_create_prescription(self):
-    #     self.ensure_one()
-    #     return {
-    #         'name': _('Create Prescription'),
-    #         'type': 'ir.actions.act_window',
-    #         'res_model': 'clinic.prescription',
-    #         'view_mode': 'form',
-    #         'context': {
-    #             'default_patient_id': self.patient_id.id,
-    #             'default_doctor_id': self.doctor_id.id,
-    #             'default_appointment_id': self.id,
-    #         },
-    #         'target': 'current',
-    #     }
+    def action_create_prescription(self):
+        self.ensure_one()
+        return {
+            'name': _('Create Prescription'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'clinic.prescription',
+            'view_mode': 'form',
+            'context': {
+                'default_patient_id': self.patient_id.id,
+                'default_doctor_id': self.doctor_id.id,
+                'default_appointment_id': self.id,
+            },
+            'target': 'current',
+        }
 
     def action_create_invoice(self):
         self.ensure_one()

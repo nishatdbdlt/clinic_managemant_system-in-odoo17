@@ -60,8 +60,8 @@ class ClinicDoctor(models.Model):
     working_hours_end = fields.Float(string='Working Hours End', default=17.0)
 
     # Relations
-    # appointment_ids = fields.One2many('clinic.appointment', 'doctor_id', string='Appointments')
-    # prescription_ids = fields.One2many('clinic.prescription', 'doctor_id', string='Prescriptions')
+    appointment_ids = fields.One2many('clinic.appointment', 'doctor_id', string='Appointments')
+    prescription_ids = fields.One2many('clinic.prescription', 'doctor_id', string='Prescriptions')
 
     # Status
     active = fields.Boolean(string='Active', default=True)
@@ -103,13 +103,13 @@ class ClinicDoctor(models.Model):
             if record.working_hours_start >= record.working_hours_end:
                 raise ValidationError(_('Working hours end must be after working hours start.'))
 
-    # def action_view_appointments(self):
-    #     self.ensure_one()
-    #     return {
-    #         'name': _('Appointments'),
-    #         'type': 'ir.actions.act_window',
-    #         'res_model': 'clinic.appointment',
-    #         'view_mode': 'tree,form,calendar',
-    #         'domain': [('doctor_id', '=', self.id)],
-    #         'context': {'default_doctor_id': self.id}
-    #     }
+    def action_view_appointments(self):
+        self.ensure_one()
+        return {
+            'name': _('Appointments'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'clinic.appointment',
+            'view_mode': 'tree,form,calendar',
+            'domain': [('doctor_id', '=', self.id)],
+            'context': {'default_doctor_id': self.id}
+        }

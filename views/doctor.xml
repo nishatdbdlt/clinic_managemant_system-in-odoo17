@@ -138,5 +138,12 @@
               parent="menu_clinic_management"
               action="action_clinic_appointment"
               sequence="2"/>
+     <menuitem id="menu_prescription"
+              name="Prescription"
+              parent="menu_clinic_management"
+              action="action_clinic_prescription"
+              sequence="2"/>
+
+
 
 </odoo>

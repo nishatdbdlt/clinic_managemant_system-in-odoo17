@@ -52,11 +52,11 @@ class ClinicPatient(models.Model):
     insurance_expiry = fields.Date(string='Insurance Expiry Date')
 
     # Relations
-    # appointment_ids = fields.One2many('clinic.appointment', 'patient_id', string='Appointments')
-    # prescription_ids = fields.One2many('clinic.prescription', 'patient_id', string='Prescriptions')
+    appointment_ids = fields.One2many('clinic.appointment', 'patient_id', string='Appointments')
+    prescription_ids = fields.One2many('clinic.prescription', 'patient_id', string='Prescriptions')
     # lab_test_ids = fields.One2many('clinic.lab.test', 'patient_id', string='Lab Tests')
-    # cabin_id = fields.Many2one('clinic.cabin', string='Current Cabin')
-    # ward_id = fields.Many2one('clinic.ward', string='Current Ward')
+    cabin_id = fields.Many2one('clinic.cabin', string='Current Cabin')
+    ward_id = fields.Many2one('clinic.ward', string='Current Ward')
 
     # Status
     active = fields.Boolean(string='Active', default=True)
@@ -109,24 +109,24 @@ class ClinicPatient(models.Model):
             if record.weight and record.weight < 0:
                 raise ValidationError(_('Weight cannot be negative.'))
 
-    # def action_view_appointments(self):
-    #     self.ensure_one()
-    #     return {
-    #         'name': _('Appointments'),
-    #         'type': 'ir.actions.act_window',
-    #         'res_model': 'clinic.appointment',
-    #         'view_mode': 'tree,form,calendar',
-    #         'domain': [('patient_id', '=', self.id)],
-    #         'context': {'default_patient_id': self.id}
-    #     }
+    def action_view_appointments(self):
+        self.ensure_one()
+        return {
+            'name': _('Appointments'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'clinic.appointment',
+            'view_mode': 'tree,form,calendar',
+            'domain': [('patient_id', '=', self.id)],
+            'context': {'default_patient_id': self.id}
+        }
     #
-    # def action_view_medical_history(self):
-    #     self.ensure_one()
-    #     return {
-    #         'name': _('Medical History'),
-    #         'type': 'ir.actions.act_window',
-    #         'res_model': 'clinic.prescription',
-    #         'view_mode': 'tree,form',
-    #         'domain': [('patient_id', '=', self.id)],
-    #         'context': {'default_patient_id': self.id}
-    #     }
+    def action_view_medical_history(self):
+        self.ensure_one()
+        return {
+            'name': _('Medical History'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'clinic.prescription',
+            'view_mode': 'tree,form',
+            'domain': [('patient_id', '=', self.id)],
+            'context': {'default_patient_id': self.id}
+        }
