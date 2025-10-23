@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Patient Tree View -->
+    <record id="view_clinic_patient_tree" model="ir.ui.view">
+        <field name="name">clinic.patient.tree</field>
+        <field name="model">clinic.patient</field>
+        <field name="arch" type="xml">
+            <tree string="Patients">
+                <field name="patient_id"/>
+                <field name="name"/>
+                <field name="age"/>
+                <field name="gender"/>
+                <field name="phone"/>
+                <field name="blood_group"/>
+                <field name="is_admitted" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Patient Form View -->
+    <record id="view_clinic_patient_form" model="ir.ui.view">
+        <field name="name">clinic.patient.form</field>
+        <field name="model">clinic.patient</field>
+        <field name="arch" type="xml">
+            <form string="Patient">
+                <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" required="1" placeholder="Patient Name"/></h1>
+                        <h3><field name="patient_id" readonly="1"/></h3>
+                    </div>
+
+                    <group>
+                        <group string="Personal Information">
+                            <field name="gender"/>
+                            <field name="date_of_birth"/>
+                            <field name="age"/>
+                            <field name="blood_group"/>
+                        </group>
+                        <group string="Contact Information">
+                            <field name="phone"/>
+                            <field name="email" widget="email"/>
+                            <field name="address"/>
+                            <field name="emergency_contact"/>
+                            <field name="emergency_phone"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Medical Information">
+                            <field name="height"/>
+                            <field name="weight"/>
+                            <field name="bmi"/>
+                            <field name="allergies"/>
+                            <field name="chronic_diseases"/>
+                        </group>
+                        <group string="Insurance">
+                            <field name="insurance_company"/>
+                            <field name="insurance_number"/>
+                            <field name="insurance_expiry"/>
+                        </group>
+                    </group>
+
+                    <group string="Admission Status">
+                        <group>
+                            <field name="is_admitted"/>
+                            <field name="admission_date"/>
+                        </group>
+<!--                        <group>-->
+<!--                            <field name="cabin_id"/>-->
+<!--                            <field name="ward_id"/>-->
+<!--                        </group>-->
+                    </group>
+
+                    <group>
+                        <field name="active"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Medical History">
+                            <group>
+                                <field name="medical_history" placeholder="Patient medical history..."/>
+                                <field name="current_medications" placeholder="Current medications..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Patient Search View -->
+    <record id="view_clinic_patient_search" model="ir.ui.view">
+        <field name="name">clinic.patient.search</field>
+        <field name="model">clinic.patient</field>
+        <field name="arch" type="xml">
+            <search string="Search Patients">
+                <field name="patient_id"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <filter string="Admitted" name="admitted" domain="[('is_admitted', '=', True)]"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Gender" name="gender_group" context="{'group_by': 'gender'}"/>
+                    <filter string="Blood Group" name="blood_group" context="{'group_by': 'blood_group'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Patient Action -->
+    <record id="action_clinic_patient" model="ir.actions.act_window">
+        <field name="name">Patients</field>
+        <field name="res_model">clinic.patient</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Register your first patient
+            </p>
+            <p>
+                Click the create button to register a new patient.
+            </p>
+        </field>
+    </record>
+
+    <!-- Admitted Patients Action -->
+    <record id="action_clinic_admitted_patients" model="ir.actions.act_window">
+        <field name="name">Admitted Patients</field>
+        <field name="res_model">clinic.patient</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('is_admitted', '=', True)]</field>
+        <field name="context">{'search_default_admitted': 1}</field>
+    </record>
+
+<!--    <menuitem id="menu_clinic_patient_root"-->
+<!--              name="Clinic Management"-->
+<!--              sequence="1"-->
+<!--              web_icon="clinic_management_system,static/description/icon.png"/>-->
+
+<!--    <menuitem id="menu_clinic_doctor"-->
+<!--              name="Patient"-->
+<!--              parent="menu_clinic_patient_root"-->
+<!--              action="action_clinic_admitted_patients"-->
+<!--              sequence="5"/>-->
+</odoo>
