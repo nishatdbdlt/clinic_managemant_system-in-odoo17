@@ -18,12 +18,13 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail', 'hr', 'hr_attendance', 'hr_holidays', 'account'],
+    'depends': ['base','mail', 'hr', 'hr_attendance', 'hr_holidays', 'account','web',],
 
     # always loaded
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
+        'data/sequence_data.xml',
         'views/views.xml',
         'views/templates.xml',
         'views/doctor.xml',
@@ -37,6 +38,8 @@ Long description of module's purpose
         'views/attendance.xml',
         'views/leave.xml',
         'views/kpi.xml',
+        'views/patient_report.xml',
+        'views/appointment_report.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

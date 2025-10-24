@@ -32,6 +32,8 @@
               parent="menu_clinic_management"
               action="action_clinic_prescription"
               sequence="2"/>
+    <menuitem id="menu_clinic_dashboard" name="KPI Dashboard" parent="menu_clinic_management" action="action_clinic_kpi" sequence="10"/>
+
 
 
 

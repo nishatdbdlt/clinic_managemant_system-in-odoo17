@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Patient Sequence -->
+    <record id="seq_clinic_patient" model="ir.sequence">
+        <field name="name">Patient Sequence</field>
+        <field name="code">clinic.patient</field>
+        <field name="prefix">PAT</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+    </record>
+
+    <!-- Appointment Sequence -->
+    <record id="seq_clinic_appointment" model="ir.sequence">
+        <field name="name">Appointment Sequence</field>
+        <field name="code">clinic.appointment</field>
+        <field name="prefix">APT</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+    </record>
+
+    <!-- Prescription Sequence -->
+    <record id="seq_clinic_prescription" model="ir.sequence">
+        <field name="name">Prescription Sequence</field>
+        <field name="code">clinic.prescription</field>
+        <field name="prefix">PRE</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+    </record>
+
+    <!-- Lab Test Sequence -->
+    <record id="seq_clinic_lab_test" model="ir.sequence">
+        <field name="name">Lab Test Sequence</field>
+        <field name="code">clinic.lab.test</field>
+        <field name="prefix">LAB</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+    </record>
+
+    <!-- Payroll Sequence -->
+    <record id="seq_clinic_payroll" model="ir.sequence">
+        <field name="name">Payroll Sequence</field>
+        <field name="code">clinic.payroll</field>
+        <field name="prefix">PAY</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+    </record>
+
+    <!-- Leave Sequence -->
+    <record id="seq_clinic_leave" model="ir.sequence">
+        <field name="name">Leave Sequence</field>
+        <field name="code">clinic.leave</field>
+        <field name="prefix">LVE</field>
+        <field name="padding">5</field>
+        <field name="number_increment">1</field>
+        <field name="number_next">1</field>
+    </record>
+</odoo>

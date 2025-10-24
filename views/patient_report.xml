@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Patient Report Template -->
+    <record id="action_report_patient" model="ir.actions.report">
+        <field name="name">Patient Report</field>
+        <field name="model">clinic.patient</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">clinic_management_system.report_patient_template</field>
+        <field name="report_file">clinic_management_system.report_patient_template</field>
+        <field name="binding_model_id" ref="model_clinic_patient"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_patient_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <h2>Patient Information</h2>
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Patient ID:</strong> <span t-field="doc.patient_id"/><br/>
+                                <strong>Name:</strong> <span t-field="doc.name"/><br/>
+                                <strong>Age:</strong> <span t-field="doc.age"/><br/>
+                                <strong>Gender:</strong> <span t-field="doc.gender"/><br/>
+                            </div>
+                            <div class="col-6">
+                                <strong>Phone:</strong> <span t-field="doc.phone"/><br/>
+                                <strong>Email:</strong> <span t-field="doc.email"/><br/>
+                                <strong>Blood Group:</strong> <span t-field="doc.blood_group"/><br/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -60,7 +60,7 @@ class ClinicAppointment(models.Model):
         ('paid', 'Paid'),
     ], string='Payment Status', compute='_compute_payment_status', store=True, tracking=True)
 
-    # invoice_id = fields.Many2one('account.move', string='Invoice', copy=False)
+    invoice_id = fields.Many2one('account.move', string='Invoice', copy=False)
 
     # Status
     state = fields.Selection([
@@ -73,7 +73,7 @@ class ClinicAppointment(models.Model):
 
     # Relations
     prescription_id = fields.Many2one('clinic.prescription', string='Prescription')
-    # lab_test_ids = fields.One2many('clinic.lab.test', 'appointment_id', string='Lab Tests')
+    lab_test_ids = fields.One2many('clinic.lab.test', 'appointment_id', string='Lab Tests')
 
     # Reminder
     reminder_sent = fields.Boolean(string='Reminder Sent', default=False)

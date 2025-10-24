@@ -13,8 +13,6 @@
     </record>
 
     <!-- Menu -->
-    <menuitem id="menu_clinic_root" name="Clinic Management" sequence="10"/>
-    <menuitem id="menu_clinic_dashboard" name="KPI Dashboard" parent="menu_clinic_root" action="action_clinic_kpi" sequence="10"/>
 
     <!-- Tree View -->
     <record id="view_clinic_kpi_tree" model="ir.ui.view">
