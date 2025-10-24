@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="clinic_kpi_dashboard_template" name="Clinic KPI Dashboard">
+        <t t-call="website.layout">
+            <div id="wrap" class="oe_structure">
+                <div class="container-fluid mt-4 mb-5">
+                    <!-- Header Section -->
+                    <div class="row mb-4">
+                        <div class="col-md-8">
+                            <h1 class="mb-2">
+                                <i class="fa fa-dashboard"></i> Clinic KPI Dashboard
+                            </h1>
+                            <p class="text-muted">Comprehensive clinic performance metrics and analytics</p>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <button class="btn btn-primary btn-lg" id="refreshDashboard">
+                                <i class="fa fa-refresh"></i> Refresh Data
+                            </button>
+                            <a href="/clinic/kpi/export" class="btn btn-success btn-lg ml-2">
+                                <i class="fa fa-download"></i> Export
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Date Range Filter -->
+                    <div class="card mb-4 shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0"><i class="fa fa-calendar"></i> Date Range Filter</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="date_from"><strong>From Date:</strong></label>
+                                    <input type="date" class="form-control" id="date_from" t-att-value="date_from"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="date_to"><strong>To Date:</strong></label>
+                                    <input type="date" class="form-control" id="date_to" t-att-value="date_to"/>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="d-block">&#160;</label>
+                                    <button class="btn btn-info btn-block btn-lg" id="applyDateFilter">
+                                        <i class="fa fa-filter"></i> Apply Filter
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Patient Statistics -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="mb-3 text-primary">
+                                <i class="fa fa-users"></i> Patient Statistics
+                            </h3>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-primary shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-user fa-3x text-primary mb-3"></i>
+                                    <h5 class="card-title text-muted mb-3">Total Patients</h5>
+                                    <h2 class="text-primary font-weight-bold" id="total_patients">
+                                        <t t-esc="kpi.total_patients"/>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-success shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-user-plus fa-3x text-success mb-3"></i>
+                                    <h5 class="card-title text-muted mb-3">New Patients</h5>
+                                    <h2 class="text-success font-weight-bold" id="new_patients">
+                                        <t t-esc="kpi.new_patients"/>
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-info shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-line-chart fa-3x text-info mb-3"></i>
+                                    <h5 class="card-title text-muted mb-3">Patient Growth</h5>
+                                    <h2 class="text-info font-weight-bold" id="patient_growth">
+                                        <t t-esc="round(kpi.patient_growth, 2)"/>%
+                                    </h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appointment Statistics -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="mb-3 text-primary">
+                                <i class="fa fa-calendar-check-o"></i> Appointment Statistics
+                            </h3>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-calendar fa-2x text-secondary mb-2"></i>
+                                    <h6 class="text-muted">Total Appointments</h6>
+                                    <h3 class="font-weight-bold" id="total_appointments">
+                                        <t t-esc="kpi.total_appointments"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-check-circle fa-2x text-success mb-2"></i>
+                                    <h6 class="text-muted">Completed</h6>
+                                    <h3 class="text-success font-weight-bold" id="completed_appointments">
+                                        <t t-esc="kpi.completed_appointments"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-times-circle fa-2x text-danger mb-2"></i>
+                                    <h6 class="text-muted">Cancelled</h6>
+                                    <h3 class="text-danger font-weight-bold" id="cancelled_appointments">
+                                        <t t-esc="kpi.cancelled_appointments"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-percent fa-2x text-primary mb-2"></i>
+                                    <h6 class="text-muted">Completion Rate</h6>
+                                    <h3 class="text-primary font-weight-bold" id="appointment_completion_rate">
+                                        <t t-esc="round(kpi.appointment_completion_rate, 2)"/>%
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Revenue Statistics -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="mb-3 text-success">
+                                <i class="fa fa-money"></i> Revenue Statistics
+                            </h3>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card border-success shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-dollar fa-3x text-success mb-2"></i>
+                                    <h6 class="text-muted">Total Revenue</h6>
+                                    <h3 class="text-success font-weight-bold" id="total_revenue">
+                                        $<t t-esc="round(kpi.total_revenue, 2)"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-stethoscope fa-2x text-info mb-2"></i>
+                                    <h6 class="text-muted">Consultation Revenue</h6>
+                                    <h3 class="font-weight-bold" id="consultation_revenue">
+                                        $<t t-esc="round(kpi.consultation_revenue, 2)"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-flask fa-2x text-warning mb-2"></i>
+                                    <h6 class="text-muted">Lab Test Revenue</h6>
+                                    <h3 class="font-weight-bold" id="lab_test_revenue">
+                                        $<t t-esc="round(kpi.lab_test_revenue, 2)"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card border-info shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-arrow-up fa-2x text-info mb-2"></i>
+                                    <h6 class="text-muted">Revenue Growth</h6>
+                                    <h3 class="text-info font-weight-bold" id="revenue_growth">
+                                        <t t-esc="round(kpi.revenue_growth, 2)"/>%
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Doctor Performance -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="mb-3 text-primary">
+                                <i class="fa fa-user-md"></i> Doctor Performance
+                            </h3>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-warning shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-star fa-3x text-warning mb-2"></i>
+                                    <h6 class="text-muted">Most Booked Doctor</h6>
+                                    <h4 class="font-weight-bold" id="most_booked_doctor">
+                                        <t t-if="kpi.most_booked_doctor_id">
+                                            <t t-esc="kpi.most_booked_doctor_id.name"/>
+                                        </t>
+                                        <t t-else="">N/A</t>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-users fa-2x text-primary mb-2"></i>
+                                    <h6 class="text-muted">Active Doctors</h6>
+                                    <h3 class="font-weight-bold" id="total_active_doctors">
+                                        <t t-esc="kpi.total_active_doctors"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-bar-chart fa-2x text-success mb-2"></i>
+                                    <h6 class="text-muted">Avg Consultations/Doctor</h6>
+                                    <h3 class="font-weight-bold" id="avg_consultation_per_doctor">
+                                        <t t-esc="round(kpi.avg_consultation_per_doctor, 2)"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Occupancy Statistics -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="mb-3 text-primary">
+                                <i class="fa fa-bed"></i> Occupancy Statistics
+                            </h3>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-hospital-o fa-2x text-warning mb-2"></i>
+                                    <h6 class="text-muted">Cabin Occupancy</h6>
+                                    <h3 class="text-warning font-weight-bold" id="cabin_occupancy_rate">
+                                        <t t-esc="round(kpi.cabin_occupancy_rate, 2)"/>%
+                                    </h3>
+                                    <div class="progress mt-2" style="height: 25px;">
+                                        <div class="progress-bar bg-warning" role="progressbar"
+                                             t-att-style="round(kpi.cabin_occupancy_rate, 2)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-building-o fa-2x text-info mb-2"></i>
+                                    <h6 class="text-muted">Ward Occupancy</h6>
+                                    <h3 class="text-info font-weight-bold" id="ward_occupancy_rate">
+                                        <t t-esc="round(kpi.ward_occupancy_rate, 2)"/>%
+                                    </h3>
+                                    <div class="progress mt-2" style="height: 25px;">
+                                        <div class="progress-bar bg-info" role="progressbar"
+                                             t-att-style="round(kpi.ward_occupancy_rate, 2)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-wheelchair fa-2x text-danger mb-2"></i>
+                                    <h6 class="text-muted">Admitted Patients</h6>
+                                    <h3 class="font-weight-bold" id="total_admitted_patients">
+                                        <t t-esc="kpi.total_admitted_patients"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Attendance Statistics -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="mb-3 text-primary">
+                                <i class="fa fa-clock-o"></i> Attendance Statistics
+                            </h3>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-users fa-2x text-secondary mb-2"></i>
+                                    <h6 class="text-muted">Total Staff</h6>
+                                    <h3 class="font-weight-bold" id="total_staff">
+                                        <t t-esc="kpi.total_staff"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-success shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-check fa-2x text-success mb-2"></i>
+                                    <h6 class="text-muted">Avg Attendance Rate</h6>
+                                    <h3 class="text-success font-weight-bold" id="avg_attendance_rate">
+                                        <t t-esc="round(kpi.avg_attendance_rate, 2)"/>%
+                                    </h3>
+                                    <div class="progress mt-2" style="height: 25px;">
+                                        <div class="progress-bar bg-success" role="progressbar"
+                                             t-att-style="round(kpi.avg_attendance_rate, 2)">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-hourglass-half fa-2x text-warning mb-2"></i>
+                                    <h6 class="text-muted">Total Overtime Hours</h6>
+                                    <h3 class="font-weight-bold" id="total_overtime_hours">
+                                        <t t-esc="round(kpi.total_overtime_hours, 2)"/> hrs
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lab Test Statistics -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="mb-3 text-primary">
+                                <i class="fa fa-flask"></i> Lab Test Statistics
+                            </h3>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-file-text-o fa-2x text-secondary mb-2"></i>
+                                    <h6 class="text-muted">Total Lab Tests</h6>
+                                    <h3 class="font-weight-bold" id="total_lab_tests">
+                                        <t t-esc="kpi.total_lab_tests"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-check-square fa-2x text-success mb-2"></i>
+                                    <h6 class="text-muted">Completed Tests</h6>
+                                    <h3 class="text-success font-weight-bold" id="completed_lab_tests">
+                                        <t t-esc="kpi.completed_lab_tests"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-hourglass-start fa-2x text-warning mb-2"></i>
+                                    <h6 class="text-muted">Pending Tests</h6>
+                                    <h3 class="text-warning font-weight-bold" id="pending_lab_tests">
+                                        <t t-esc="kpi.pending_lab_tests"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-percent fa-2x text-primary mb-2"></i>
+                                    <h6 class="text-muted">Completion Rate</h6>
+                                    <h3 class="text-primary font-weight-bold" id="lab_completion_rate">
+                                        <t t-esc="round(kpi.lab_completion_rate, 2)"/>%
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial KPIs -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h3 class="mb-3 text-success">
+                                <i class="fa fa-pie-chart"></i> Financial KPIs
+                            </h3>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-danger shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-money fa-3x text-danger mb-2"></i>
+                                    <h6 class="text-muted">Total Payroll</h6>
+                                    <h3 class="text-danger font-weight-bold" id="total_payroll">
+                                        $<t t-esc="round(kpi.total_payroll, 2)"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-calculator fa-2x text-info mb-2"></i>
+                                    <h6 class="text-muted">Avg Revenue/Patient</h6>
+                                    <h3 class="font-weight-bold" id="avg_revenue_per_patient">
+                                        $<t t-esc="round(kpi.avg_revenue_per_patient, 2)"/>
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card border-success shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="fa fa-line-chart fa-3x text-success mb-2"></i>
+                                    <h6 class="text-muted">Profit Margin</h6>
+                                    <h3 class="text-success font-weight-bold" id="profit_margin">
+                                        <t t-esc="round(kpi.profit_margin, 2)"/>%
+                                    </h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="row mt-5">
+                        <div class="col-12 text-center text-muted">
+                            <p><small>Last Updated: <t t-esc="datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')"/></small></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Custom CSS -->
+<!--            <style>-->
+<!--                .card {-->
+<!--                    transition: transform 0.2s, box-shadow 0.2s;-->
+<!--                }-->
+<!--                .card:hover {-->
+<!--                    transform: translateY(-5px);-->
+<!--                    box-shadow: 0 8px 16px rgba(0,0,0,0.2) !important;-->
+<!--                }-->
+<!--                .shadow-sm {-->
+<!--                    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;-->
+<!--                }-->
+<!--                .font-weight-bold {-->
+<!--                    font-weight: 700 !important;-->
+<!--                }-->
+<!--                h3 {-->
+<!--                    border-bottom: 3px solid #007bff;-->
+<!--                    padding-bottom: 10px;-->
+<!--                    display: inline-block;-->
+<!--                }-->
+<!--            </style>-->
+
+            <!-- JavaScript for AJAX functionality -->
+<!--            <script type="text/javascript">-->
+<!--                odoo.define('clinic_kpi.dashboard', function (require) {-->
+<!--                    'use strict';-->
+
+<!--                    var ajax = require('web.ajax');-->
+<!--                    var core = require('web.core');-->
+<!--                    var _t = core._t;-->
+
+<!--                    $(document).ready(function() {-->
+
+<!--                        // Refresh Dashboard-->
+<!--                        $('#refreshDashboard').on('click', function() {-->
+<!--                            var $btn = $(this);-->
+<!--                            var originalHtml = $btn.html();-->
+<!--                            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Refreshing...');-->
+
+<!--                            ajax.jsonRpc('/clinic/kpi/refresh', 'call', {})-->
+<!--                                .then(function(result) {-->
+<!--                                    if (result.success &amp;&amp; result.data) {-->
+<!--                                        // Update all numeric values-->
+<!--                                        $('#total_patients').text(result.data.total_patients);-->
+<!--                                        $('#new_patients').text(result.data.new_patients);-->
+<!--                                        $('#patient_growth').text(result.data.patient_growth + '%');-->
+
+<!--                                        $('#total_appointments').text(result.data.total_appointments);-->
+<!--                                        $('#completed_appointments').text(result.data.completed_appointments);-->
+<!--                                        $('#cancelled_appointments').text(result.data.cancelled_appointments);-->
+<!--                                        $('#appointment_completion_rate').text(result.data.appointment_completion_rate + '%');-->
+
+<!--                                        $('#total_revenue').text('$' + result.data.total_revenue);-->
+<!--                                        $('#consultation_revenue').text('$' + result.data.consultation_revenue);-->
+<!--                                        $('#lab_test_revenue').text('$' + result.data.lab_test_revenue);-->
+<!--                                        $('#revenue_growth').text(result.data.revenue_growth + '%');-->
+
+<!--                                        $('#most_booked_doctor').text(result.data.most_booked_doctor);-->
+<!--                                        $('#total_active_doctors').text(result.data.total_active_doctors);-->
+<!--                                        $('#avg_consultation_per_doctor').text(result.data.avg_consultation_per_doctor);-->
+
+<!--                                        $('#cabin_occupancy_rate').text(result.data.cabin_occupancy_rate + '%');-->
+<!--                                        $('#ward_occupancy_rate').text(result.data.ward_occupancy_rate + '%');-->
+<!--                                        $('#total_admitted_patients').text(result.data.total_admitted_patients);-->
+
+<!--                                        $('#total_staff').text(result.data.total_staff);-->
+<!--                                        $('#avg_attendance_rate').text(result.data.avg_attendance_rate + '%');-->
+<!--                                        $('#total_overtime_hours').text(result.data.total_overtime_hours + ' hrs');-->
+
+<!--                                        $('#total_lab_tests').text(result.data.total_lab_tests);-->
+<!--                                        $('#completed_lab_tests').text(result.data.completed_lab_tests);-->
+<!--                                        $('#pending_lab_tests').text(result.data.pending_lab_tests);-->
+<!--                                        $('#lab_completion_rate').text(result.data.lab_completion_rate + '%');-->
+
+<!--                                        $('#total_payroll').text('$' + result.data.total_payroll);-->
+<!--                                        $('#avg_revenue_per_patient').text('$' + result.data.avg_revenue_per_patient);-->
+<!--                                        $('#profit_margin').text(result.data.profit_margin + '%');-->
+
+<!--                                        // Update progress bars-->
+<!--                                        $('.progress-bar').each(function() {-->
+<!--                                            var $bar = $(this);-->
+<!--                                            var newWidth = $bar.closest('.card-body').find('h3').text().replace('%', '');-->
+<!--                                            $bar.css('width', newWidth + '%');-->
+<!--                                        });-->
+
+<!--                                        // Show success notification-->
+<!--                                        $('body').append(-->
+<!--                                            '<div class="alert alert-success alert-dismissible fade show position-fixed" ' +-->
+<!--                                            'style="top: 20px; right: 20px; z-index: 9999;" role="alert">' +-->
+<!--                                            '<strong>Success!</strong> Dashboard refreshed successfully.' +-->
+<!--                                            '<button type="button" class="close" data-dismiss="alert">' +-->
+<!--                                            '<span>×</span></button></div>'-->
+<!--                                        );-->
+<!--                                        setTimeout(function() {-->
+<!--                                            $('.alert').fadeOut('slow', function() { $(this).remove(); });-->
+<!--                                        }, 3000);-->
+<!--                                    } else {-->
+<!--                                        alert('Failed to refresh dashboard');-->
+<!--                                    }-->
+<!--                                })-->
+<!--                                .fail(function(error) {-->
+<!--                                    console.error('Error refreshing dashboard:', error);-->
+<!--                                    alert('Error refreshing dashboard. Please try again.');-->
+<!--                                })-->
+<!--                                .always(function() {-->
+<!--                                    $btn.prop('disabled', false).html(originalHtml);-->
+<!--                                });-->
+<!--                        });-->
+
+<!--                        // Apply Date Filter-->
+<!--                        $('#applyDateFilter').on('click', function() {-->
+<!--                            var dateFrom = $('#date_from').val();-->
+<!--                            var dateTo = $('#date_to').val();-->
+
+<!--                            if (!dateFrom || !dateTo) {-->
+<!--                                alert('Please select both From Date and To Date');-->
+<!--                                return;-->
+<!--                            }-->
+
+<!--                            if (new Date(dateFrom) > new Date(dateTo)) {-->
+<!--                                alert('From Date cannot be later than To Date');-->
+<!--                                return;-->
+<!--                            }-->
+
+<!--                            var $btn = $(this);-->
+<!--                            var originalHtml = $btn.html();-->
+<!--                            $btn.prop('disabled', true).html('<i class="fa fa-spinner fa-spin"></i> Applying...');-->
+
+<!--                            ajax.jsonRpc('/clinic/kpi/update_dates', 'call', {-->
+<!--                                date_from: dateFrom,-->
+<!--                                date_to: dateTo-->
+<!--                            })-->
+<!--                            .then(function(result) {-->
+<!--                                if (result.success) {-->
+<!--                                    location.reload();-->
+<!--                                } else {-->
+<!--                                    alert('Failed to update date range');-->
+<!--                                }-->
+<!--                            })-->
+<!--                            .fail(function(error) {-->
+<!--                                console.error('Error updating dates:', error);-->
+<!--                                alert('Error updating date range. Please try again.');-->
+<!--                            })-->
+<!--                            .always(function() {-->
+<!--                                $btn.prop('disabled', false).html(originalHtml);-->
+<!--                            });-->
+<!--                        });-->
+
+<!--                    });-->
+<!--                });-->
+<!--            </script>-->
+<!--            </script>-->
+
+        </t>
+    </template>
+</odoo>

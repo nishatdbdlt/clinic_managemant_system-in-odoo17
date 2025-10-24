@@ -8,7 +8,7 @@
 Long description of module's purpose
     """,
 
-    'author': "My Company",
+    'author': "nishat",
     'website': "https://www.yourcompany.com",
 
     # Categories can be used to filter modules in modules listing
@@ -18,7 +18,7 @@ Long description of module's purpose
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base','mail', 'hr', 'hr_attendance', 'hr_holidays', 'account','web',],
+    'depends': ['base','mail', 'hr', 'hr_attendance', 'hr_holidays', 'account','web','website',],
 
     # always loaded
     'data': [
@@ -40,6 +40,7 @@ Long description of module's purpose
         'views/kpi.xml',
         'views/patient_report.xml',
         'views/appointment_report.xml',
+        'views/dashboard.xml',
     ],
     # only loaded in demonstration mode
     'demo': [
