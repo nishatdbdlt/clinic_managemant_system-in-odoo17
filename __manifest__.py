@@ -22,6 +22,7 @@ Long description of module's purpose
 
     # always loaded
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/views.xml',
         'views/templates.xml',
@@ -31,6 +32,8 @@ Long description of module's purpose
         'views/prescription.xml',
         'views/cabin.xml',
         'views/word.xml',
+        'views/lab.xml',
+        'views/payroll.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

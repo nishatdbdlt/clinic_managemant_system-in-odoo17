@@ -110,39 +110,7 @@
     <!-- ============================= -->
     <!--           MENU ITEM           -->
     <!-- ============================= -->
-     <menuitem id="menu_clinic_management"
-              name="Clinic Management"
-              sequence="1"
-              web_icon="clinic_management_system,static/description/icon.png"/>
 
-    <!-- Patient Submenu -->
-    <menuitem id="menu_clinic_patient"
-              name="Patients"
-              parent="menu_clinic_management"
-              action="action_clinic_patient"
-              sequence="1"/>
-
-    <!-- Admitted Patients Submenu -->
-    <menuitem id="menu_clinic_admitted_patients"
-              name="Admitted Patients"
-              parent="menu_clinic_management"
-              action="action_clinic_admitted_patients"
-              sequence="2"/>
-       <menuitem id="menu_doctor"
-              name="Doctor"
-              parent="menu_clinic_management"
-              action="action_clinic_doctor"
-              sequence="2"/>
-     <menuitem id="menu_appointment"
-              name="Appointment"
-              parent="menu_clinic_management"
-              action="action_clinic_appointment"
-              sequence="2"/>
-     <menuitem id="menu_prescription"
-              name="Prescription"
-              parent="menu_clinic_management"
-              action="action_clinic_prescription"
-              sequence="2"/>
 
 
 

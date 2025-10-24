@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Payroll Tree View -->
+    <record id="view_clinic_payroll_tree" model="ir.ui.view">
+        <field name="name">clinic.payroll.tree</field>
+        <field name="model">clinic.payroll</field>
+        <field name="arch" type="xml">
+            <tree string="Payroll" decoration-info="state=='draft'" decoration-success="state=='paid'" decoration-warning="state=='confirmed'">
+                <field name="payroll_number"/>
+                <field name="employee_id"/>
+                <field name="employee_type"/>
+                <field name="payment_month"/>
+                <field name="payment_year"/>
+                <field name="basic_salary" widget="monetary"/>
+                <field name="net_salary" widget="monetary"/>
+                <field name="payment_date"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Payroll Form View -->
+    <record id="view_clinic_payroll_form" model="ir.ui.view">
+        <field name="name">clinic.payroll.form</field>
+        <field name="model">clinic.payroll</field>
+        <field name="arch" type="xml">
+            <form string="Payroll">
+                <header>
+                    <button name="action_confirm" string="Confirm" type="object" class="oe_highlight"/>
+                    <button name="action_pay" string="Mark as Paid" type="object" class="oe_highlight"/>
+                    <button name="action_cancel" string="Cancel" type="object"/>
+                    <button name="action_print_payslip" string="Print Payslip" type="object" class="btn-primary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="payroll_number" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Employee Information">
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="employee_type"/>
+                            <field name="department_id"/>
+                            <field name="job_position"/>
+                        </group>
+                        <group string="Period">
+                            <field name="payment_month"/>
+                            <field name="payment_year"/>
+                            <field name="payment_date"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Salary Components">
+                            <group>
+                                <group string="Basic Salary">
+                                    <field name="basic_salary" widget="monetary"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Allowances">
+                                    <field name="house_allowance" widget="monetary"/>
+                                    <field name="medical_allowance" widget="monetary"/>
+                                    <field name="transport_allowance" widget="monetary"/>
+                                    <field name="performance_bonus" widget="monetary"/>
+                                    <field name="other_allowances" widget="monetary"/>
+                                </group>
+                                <group string="Deductions">
+                                    <field name="tax_deduction" widget="monetary"/>
+                                    <field name="provident_fund" widget="monetary"/>
+                                    <field name="insurance" widget="monetary"/>
+                                    <field name="loan_deduction" widget="monetary"/>
+                                    <field name="advance_deduction" widget="monetary"/>
+                                    <field name="other_deductions" widget="monetary"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Summary" class="oe_subtotal_footer">
+                                    <field name="total_earnings" widget="monetary" class="oe_subtotal_footer_separator"/>
+                                    <field name="total_deductions" widget="monetary"/>
+                                    <field name="net_salary" widget="monetary" class="oe_subtotal_footer_separator" style="font-size: 1.2em; font-weight: bold;"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Attendance">
+                            <group>
+                                <group>
+                                    <field name="working_days"/>
+                                    <field name="present_days"/>
+                                    <field name="absent_days"/>
+                                </group>
+                                <group>
+                                    <field name="overtime_hours"/>
+                                    <field name="overtime_rate" widget="monetary"/>
+                                    <field name="overtime_amount" widget="monetary"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Payment Information">
+                            <group>
+                                <group>
+                                    <field name="payment_method"/>
+                                    <field name="bank_name"/>
+                                    <field name="bank_account"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes" placeholder="Additional notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Payroll Search View -->
+<!--    <record id="view_clinic_payroll_search" model="ir.ui.view">-->
+<!--        <field name="name">clinic.payroll.search</field>-->
+<!--        <field name="model">clinic.payroll</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <search string="Search Payroll">-->
+<!--                <field name="payroll_number"/>-->
+<!--                <field name="employee_id"/>-->
+<!--&lt;!&ndash; This Month: use numeric month comparison via payment_month_number &ndash;&gt;-->
+<!--            <filter string="This Month" name="this_month"-->
+<!--    domain="[('payment_month_number', '=', context_today().month), ('payment_year', '=', context_today().year)]"/>-->
+<!--                <separator/>-->
+<!--                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>-->
+<!--                <filter string="Confirmed" name="confirmed" domain="[('state', '=', 'confirmed')]"/>-->
+<!--                <filter string="Paid" name="paid" domain="[('state', '=', 'paid')]"/>-->
+<!--                <group expand="0" string="Group By">-->
+<!--                    <filter string="Employee" name="employee_group" context="{'group_by': 'employee_id'}"/>-->
+<!--                    <filter string="Employee Type" name="employee_type_group" context="{'group_by': 'employee_type'}"/>-->
+<!--                    <filter string="Month" name="month_group" context="{'group_by': 'payment_month'}"/>-->
+<!--                    <filter string="Year" name="year_group" context="{'group_by': 'payment_year'}"/>-->
+<!--                    <filter string="Status" name="state_group" context="{'group_by': 'state'}"/>-->
+<!--                </group>-->
+<!--            </search>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <!-- Payroll Action -->
+    <record id="action_clinic_payroll" model="ir.actions.act_window">
+        <field name="name">Payroll</field>
+        <field name="res_model">clinic.payroll</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new payroll record
+            </p>
+            <p>
+                Click the create button to process employee payroll.
+            </p>
+        </field>
+    </record>
+    <menuitem
+            id="menu_payroll"
+            name="Payroll"
+            parent="menu_clinic_management"
+            action="action_clinic_payroll"
+            sequence="2"
+        />
+
+
+
+
+</odoo>

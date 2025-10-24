@@ -9,3 +9,15 @@ access_clinic_prescription_user,access_clinic_prescription_user,model_clinic_pre
 
 access_clinic_cabin_user,access_clinic_cabin_user,model_clinic_cabin,,1,1,1,1
 access_clinic_ward_user,access_clinic_ward_user,model_clinic_ward,,1,1,1,1
+
+access_clinic_lab_test_user,access_clinic_lab_test_user,model_clinic_lab_test,,1,1,1,1
+
+access_clinic_payroll_user,access_clinic_payroll_user,model_clinic_payroll,,1,1,1,1
+
+
+
+
+access_clinic_doctor_manager,access_clinic_doctor_manager,model_clinic_doctor,clinic_management_system.group_clinic_manager,1,1,1,1
+access_clinic_doctor_doctor,access_clinic_doctor_doctor,model_clinic_doctor,clinic_management_system.group_clinic_doctor,1,1,0,0
+access_clinic_doctor_receptionist,access_clinic_doctor_receptionist,model_clinic_doctor,clinic_management_system.group_clinic_receptionist,1,0,0,0
+
