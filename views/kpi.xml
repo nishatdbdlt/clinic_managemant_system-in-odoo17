@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action -->
+    <record id="action_clinic_kpi" model="ir.actions.act_window">
+        <field name="name">Clinic KPI Dashboard</field>
+        <field name="res_model">clinic.kpi</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="oe_view_nocontent_create">
+                Click 'Create' to generate a new KPI dashboard.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu -->
+    <menuitem id="menu_clinic_root" name="Clinic Management" sequence="10"/>
+    <menuitem id="menu_clinic_dashboard" name="KPI Dashboard" parent="menu_clinic_root" action="action_clinic_kpi" sequence="10"/>
+
+    <!-- Tree View -->
+    <record id="view_clinic_kpi_tree" model="ir.ui.view">
+        <field name="name">clinic.kpi.tree</field>
+        <field name="model">clinic.kpi</field>
+        <field name="arch" type="xml">
+            <tree string="Clinic KPI Dashboard">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="total_patients"/>
+                <field name="new_patients"/>
+                <field name="patient_growth"/>
+                <field name="total_appointments"/>
+                <field name="appointment_completion_rate"/>
+                <field name="total_revenue"/>
+                <field name="revenue_growth"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_clinic_kpi_form" model="ir.ui.view">
+        <field name="name">clinic.kpi.form</field>
+        <field name="model">clinic.kpi</field>
+        <field name="arch" type="xml">
+            <form string="Clinic KPI Dashboard">
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                    <notebook>
+                        <page string="Patients">
+                            <group>
+                                <field name="total_patients"/>
+                                <field name="new_patients"/>
+                                <field name="patient_growth"/>
+                            </group>
+                        </page>
+                        <page string="Appointments">
+                            <group>
+                                <field name="total_appointments"/>
+                                <field name="completed_appointments"/>
+                                <field name="cancelled_appointments"/>
+                                <field name="appointment_completion_rate"/>
+                            </group>
+                        </page>
+                        <page string="Revenue">
+                            <group>
+                                <field name="total_revenue"/>
+                                <field name="consultation_revenue"/>
+                                <field name="lab_test_revenue"/>
+                                <field name="revenue_growth"/>
+                            </group>
+                        </page>
+                        <page string="Doctors">
+                            <group>
+                                <field name="most_booked_doctor_id"/>
+                                <field name="total_active_doctors"/>
+                                <field name="avg_consultation_per_doctor"/>
+                            </group>
+                        </page>
+                        <page string="Occupancy">
+                            <group>
+                                <field name="cabin_occupancy_rate"/>
+                                <field name="ward_occupancy_rate"/>
+                                <field name="total_admitted_patients"/>
+                            </group>
+                        </page>
+                        <page string="Attendance">
+                            <group>
+                                <field name="total_staff"/>
+                                <field name="avg_attendance_rate"/>
+                                <field name="total_overtime_hours"/>
+                            </group>
+                        </page>
+                        <page string="Lab Tests">
+                            <group>
+                                <field name="total_lab_tests"/>
+                                <field name="completed_lab_tests"/>
+                                <field name="pending_lab_tests"/>
+                                <field name="lab_completion_rate"/>
+                            </group>
+                        </page>
+                        <page string="Financials">
+                            <group>
+                                <field name="total_payroll"/>
+                                <field name="avg_revenue_per_patient"/>
+                                <field name="profit_margin"/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <footer>
+                        <button name="action_refresh_dashboard" type="object" string="Refresh Dashboard" class="btn-primary"/>
+                        <button string="Close" class="btn-secondary" special="cancel"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

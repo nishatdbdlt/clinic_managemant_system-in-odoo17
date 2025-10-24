@@ -21,3 +21,20 @@ access_clinic_doctor_manager,access_clinic_doctor_manager,model_clinic_doctor,cl
 access_clinic_doctor_doctor,access_clinic_doctor_doctor,model_clinic_doctor,clinic_management_system.group_clinic_doctor,1,1,0,0
 access_clinic_doctor_receptionist,access_clinic_doctor_receptionist,model_clinic_doctor,clinic_management_system.group_clinic_receptionist,1,0,0,0
 
+
+access_clinic_attendance_user,clinic.attendance user,model_clinic_attendance,base.group_user,1,1,1,1
+access_clinic_attendance_manager,clinic.attendance manager,model_clinic_attendance,base.group_system,1,1,1,1
+access_clinic_attendance_summary_user,clinic.attendance.summary user,model_clinic_attendance_summary,base.group_user,1,1,1,1
+access_clinic_attendance_summary_manager,clinic.attendance.summary manager,model_clinic_attendance_summary,base.group_system,1,1,1,1
+
+
+access_clinic_leave_user,clinic.leave user,model_clinic_leave,base.group_user,1,1,1,1
+access_clinic_leave_manager,clinic.leave manager,model_clinic_leave,base.group_system,1,1,1,1
+access_clinic_leave_allocation_user,clinic.leave.allocation user,model_clinic_leave_allocation,base.group_user,1,1,1,1
+access_clinic_leave_allocation_manager,clinic.leave.allocation manager,model_clinic_leave_allocation,base.group_system,1,1,1,1
+
+access_clinic_kpi_user,clinic.kpi user,model_clinic_kpi,base.group_user,1,1,1,0
+access_clinic_kpi_manager,clinic.kpi manager,model_clinic_kpi,base.group_system,1,1,1,1
+
+
+

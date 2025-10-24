@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Attendance Tree View -->
+    <record id="view_clinic_attendance_tree" model="ir.ui.view">
+        <field name="name">clinic.attendance.tree</field>
+        <field name="model">clinic.attendance</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance" decoration-success="status=='present'" decoration-warning="status=='late'" decoration-danger="status=='absent'" decoration-info="status=='half_day'">
+                <field name="employee_id"/>
+                <field name="employee_type"/>
+                <field name="attendance_date"/>
+                <field name="check_in" widget="datetime"/>
+                <field name="check_out" widget="datetime"/>
+                <field name="worked_hours" widget="float_time"/>
+                <field name="overtime_hours" widget="float_time"/>
+                <field name="shift"/>
+                <field name="status" widget="badge"/>
+                <field name="is_late" widget="boolean"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Attendance Form View -->
+    <record id="view_clinic_attendance_form" model="ir.ui.view">
+        <field name="name">clinic.attendance.form</field>
+        <field name="model">clinic.attendance</field>
+        <field name="arch" type="xml">
+            <form string="Attendance">
+                <header>
+                    <button name="action_check_out" string="Check Out" type="object" class="oe_highlight"/>
+                    <field name="status" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group string="Employee Information">
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="employee_type"/>
+                            <field name="department_id"/>
+                        </group>
+                        <group string="Attendance Details">
+                            <field name="attendance_date"/>
+                            <field name="shift"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Check-in">
+                            <field name="check_in" widget="datetime"/>
+                            <field name="check_in_location"/>
+                            <field name="is_late" widget="boolean"/>
+                            <field name="late_minutes" widget="float_time"/>
+                        </group>
+                        <group string="Check-out">
+                            <field name="check_out" widget="datetime"/>
+                            <field name="check_out_location"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Working Hours">
+                            <field name="expected_hours" widget="float_time"/>
+                            <field name="worked_hours" widget="float_time"/>
+                            <field name="overtime_hours" widget="float_time"/>
+                        </group>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="notes" placeholder="Additional notes about attendance..."/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Attendance Calendar View -->
+    <record id="view_clinic_attendance_calendar" model="ir.ui.view">
+        <field name="name">clinic.attendance.calendar</field>
+        <field name="model">clinic.attendance</field>
+        <field name="arch" type="xml">
+            <calendar string="Attendance" date_start="attendance_date" color="status" mode="month">
+                <field name="employee_id"/>
+                <field name="status"/>
+                <field name="worked_hours"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Attendance Search View -->
+    <record id="view_clinic_attendance_search" model="ir.ui.view">
+        <field name="name">clinic.attendance.search</field>
+        <field name="model">clinic.attendance</field>
+        <field name="arch" type="xml">
+            <search string="Search Attendance">
+                <field name="employee_id"/>
+                <filter string="Today" name="today" domain="[('attendance_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+                <filter string="This Week" name="this_week" domain="[('attendance_date', '&gt;=', (context_today() - datetime.timedelta(days=context_today().weekday())).strftime('%Y-%m-%d'))]"/>
+                <filter string="This Month" name="this_month" domain="[('attendance_date', '&gt;=', context_today().replace(day=1).strftime('%Y-%m-%d'))]"/>
+                <separator/>
+                <filter string="Present" name="present" domain="[('status', '=', 'present')]"/>
+                <filter string="Late" name="late" domain="[('status', '=', 'late')]"/>
+                <filter string="Half Day" name="half_day" domain="[('status', '=', 'half_day')]"/>
+                <filter string="Absent" name="absent" domain="[('status', '=', 'absent')]"/>
+                <separator/>
+                <filter string="Not Checked Out" name="not_checked_out" domain="[('check_out', '=', False)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="employee_group" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Employee Type" name="employee_type_group" context="{'group_by': 'employee_type'}"/>
+                    <filter string="Date" name="date_group" context="{'group_by': 'attendance_date'}"/>
+                    <filter string="Status" name="status_group" context="{'group_by': 'status'}"/>
+                    <filter string="Shift" name="shift_group" context="{'group_by': 'shift'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Attendance Action -->
+    <record id="action_clinic_attendance" model="ir.actions.act_window">
+        <field name="name">Attendance</field>
+        <field name="res_model">clinic.attendance</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="context">{'search_default_today': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Record your first attendance
+            </p>
+            <p>
+                Click the create button to record attendance.
+            </p>
+        </field>
+    </record>
+
+    <!-- Attendance Summary Tree View -->
+    <record id="view_clinic_attendance_summary_tree" model="ir.ui.view">
+        <field name="name">clinic.attendance.summary.tree</field>
+        <field name="model">clinic.attendance.summary</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Summary">
+                <field name="employee_id"/>
+                <field name="month"/>
+                <field name="year"/>
+                <field name="total_working_days"/>
+                <field name="present_days"/>
+                <field name="absent_days"/>
+                <field name="half_days"/>
+                <field name="late_days"/>
+                <field name="total_worked_hours" widget="float_time"/>
+                <field name="total_overtime_hours" widget="float_time"/>
+                <field name="attendance_percentage" widget="percentage"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Attendance Summary Form View -->
+    <record id="view_clinic_attendance_summary_form" model="ir.ui.view">
+        <field name="name">clinic.attendance.summary.form</field>
+        <field name="model">clinic.attendance.summary</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Summary">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="month"/>
+                            <field name="year"/>
+                            <field name="total_working_days"/>
+                        </group>
+                        <group>
+                            <field name="attendance_percentage" widget="progressbar"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="Attendance">
+                            <field name="present_days"/>
+                            <field name="absent_days"/>
+                            <field name="half_days"/>
+                            <field name="late_days"/>
+                        </group>
+                        <group string="Working Hours">
+                            <field name="total_worked_hours" widget="float_time"/>
+                            <field name="total_overtime_hours" widget="float_time"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Attendance Summary Action -->
+    <record id="action_clinic_attendance_summary" model="ir.actions.act_window">
+        <field name="name">Attendance Summary</field>
+        <field name="res_model">clinic.attendance.summary</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No attendance summary found
+            </p>
+        </field>
+    </record>
+     <menuitem id="menu_attendance_samary"
+              name="Attendance sammary"
+              parent="menu_clinic_management"
+              action="action_clinic_attendance_summary"
+              sequence="2"/>
+     <menuitem id="menu_attendance"
+              name="Attendance"
+              parent="menu_clinic_management"
+              action="action_clinic_attendance"
+              sequence="2"/>
+</odoo>

@@ -34,6 +34,9 @@ Long description of module's purpose
         'views/word.xml',
         'views/lab.xml',
         'views/payroll.xml',
+        'views/attendance.xml',
+        'views/leave.xml',
+        'views/kpi.xml',
     ],
     # only loaded in demonstration mode
     'demo': [

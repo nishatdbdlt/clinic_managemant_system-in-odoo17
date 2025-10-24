@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Leave Tree View -->
+    <record id="view_clinic_leave_tree" model="ir.ui.view">
+        <field name="name">clinic.leave.tree</field>
+        <field name="model">clinic.leave</field>
+        <field name="arch" type="xml">
+            <tree string="Leaves" decoration-info="state=='draft'" decoration-warning="state=='submitted'" decoration-success="state=='approved'" decoration-danger="state=='rejected'">
+                <field name="leave_number"/>
+                <field name="employee_id"/>
+                <field name="leave_type"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="number_of_days"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Leave Form View -->
+    <record id="view_clinic_leave_form" model="ir.ui.view">
+        <field name="name">clinic.leave.form</field>
+        <field name="model">clinic.leave</field>
+        <field name="arch" type="xml">
+            <form string="Leave">
+                <header>
+                    <button name="action_submit" string="Submit" type="object" class="oe_highlight"/>
+                    <button name="action_approve" string="Approve" type="object" class="oe_highlight"/>
+                    <button name="action_reject" string="Reject" type="object"/>
+                    <button name="action_cancel" string="Cancel" type="object"/>
+                    <button name="action_reset_to_draft" string="Reset to Draft" type="object"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,submitted,approved"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="leave_number" readonly="1"/></h1>
+                    </div>
+
+                    <group>
+                        <group string="Employee Information">
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="department_id"/>
+                            <field name="request_date" readonly="1"/>
+                        </group>
+                        <group string="Leave Balance">
+                            <field name="leave_balance"/>
+                        </group>
+                    </group>
+
+                    <group>
+                        <group string="Leave Details">
+                            <field name="leave_type"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="number_of_days"/>
+                            <field name="is_half_day"/>
+                            <field name="half_day_period"/>
+                        </group>
+                        <group string="Approval">
+                            <field name="approved_by" readonly="1"/>
+                            <field name="approval_date" readonly="1"/>
+                            <field name="rejection_reason"/>
+                        </group>
+                    </group>
+
+                    <group string="Reason">
+                        <field name="reason" placeholder="Reason for leave request..." required="1"/>
+                    </group>
+
+                    <group string="Attachment">
+                        <field name="attachment" filename="attachment_filename"/>
+                        <field name="attachment_filename" invisible="1"/>
+                    </group>
+
+                    <notebook>
+                        <page string="Handover">
+                            <group>
+                                <field name="handover_to"/>
+                                <field name="handover_notes" placeholder="Work handover notes..."/>
+                            </group>
+                        </page>
+                        <page string="Additional Notes">
+                            <field name="notes" placeholder="Additional notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Leave Calendar View -->
+    <record id="view_clinic_leave_calendar" model="ir.ui.view">
+        <field name="name">clinic.leave.calendar</field>
+        <field name="model">clinic.leave</field>
+        <field name="arch" type="xml">
+            <calendar string="Leaves" date_start="start_date" date_stop="end_date" color="leave_type" mode="month">
+                <field name="employee_id"/>
+                <field name="leave_type"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Leave Search View -->
+    <record id="view_clinic_leave_search" model="ir.ui.view">
+        <field name="name">clinic.leave.search</field>
+        <field name="model">clinic.leave</field>
+        <field name="arch" type="xml">
+            <search string="Search Leaves">
+                <field name="leave_number"/>
+                <field name="employee_id"/>
+                <filter string="My Leaves" name="my_leaves" domain="[('employee_id.user_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Draft" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Submitted" name="submitted" domain="[('state', '=', 'submitted')]"/>
+                <filter string="Approved" name="approved" domain="[('state', '=', 'approved')]"/>
+                <filter string="Rejected" name="rejected" domain="[('state', '=', 'rejected')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="employee_group" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Leave Type" name="leave_type_group" context="{'group_by': 'leave_type'}"/>
+                    <filter string="Status" name="state_group" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Leave Action -->
+    <record id="action_clinic_leave" model="ir.actions.act_window">
+        <field name="name">Leaves</field>
+        <field name="res_model">clinic.leave</field>
+        <field name="view_mode">tree,form,calendar</field>
+        <field name="context">{'search_default_my_leaves': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Request a new leave
+            </p>
+            <p>
+                Click the create button to request leave.
+            </p>
+        </field>
+    </record>
+
+    <!-- Leave Allocation Tree View -->
+    <record id="view_clinic_leave_allocation_tree" model="ir.ui.view">
+        <field name="name">clinic.leave.allocation.tree</field>
+        <field name="model">clinic.leave.allocation</field>
+        <field name="arch" type="xml">
+            <tree string="Leave Allocation">
+                <field name="employee_id"/>
+                <field name="year"/>
+                <field name="sick_leave"/>
+                <field name="sick_leave_used"/>
+                <field name="sick_leave_balance"/>
+                <field name="casual_leave"/>
+                <field name="casual_leave_used"/>
+                <field name="casual_leave_balance"/>
+                <field name="annual_leave"/>
+                <field name="annual_leave_used"/>
+                <field name="annual_leave_balance"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Leave Allocation Form View -->
+    <record id="view_clinic_leave_allocation_form" model="ir.ui.view">
+        <field name="name">clinic.leave.allocation.form</field>
+        <field name="model">clinic.leave.allocation</field>
+        <field name="arch" type="xml">
+            <form string="Leave Allocation">
+                <sheet>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="year"/>
+                    </group>
+                    <notebook>
+                        <page string="Sick Leave">
+                            <group>
+                                <group>
+                                    <field name="sick_leave"/>
+                                    <field name="sick_leave_used" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="sick_leave_balance" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Casual Leave">
+                            <group>
+                                <group>
+                                    <field name="casual_leave"/>
+                                    <field name="casual_leave_used" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="casual_leave_balance" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Annual Leave">
+                            <group>
+                                <group>
+                                    <field name="annual_leave"/>
+                                    <field name="annual_leave_used" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="annual_leave_balance" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Other Leaves">
+                            <group>
+                                <field name="maternity_leave"/>
+                                <field name="paternity_leave"/>
+                                <field name="emergency_leave"/>
+                                <field name="compensatory_leave"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Leave Allocation Action -->
+    <record id="action_clinic_leave_allocation" model="ir.actions.act_window">
+        <field name="name">Leave Allocation</field>
+        <field name="res_model">clinic.leave.allocation</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create leave allocation
+            </p>
+        </field>
+    </record>
+     <menuitem id="menu_leave"
+              name="leave"
+              parent="menu_clinic_management"
+              action="action_clinic_leave"
+              sequence="2"/>
+    <menuitem id="menu_leave_allocation"
+              name="leave Allocation"
+              parent="menu_clinic_management"
+              action="action_clinic_leave_allocation"
+              sequence="2"/>
+</odoo>

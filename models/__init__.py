@@ -8,3 +8,7 @@ from . import  prescription
 from . import cabin
 from . import  lab
 from . import payroll
+from . import  attendance
+
+from . import leave
+from . import kpi
